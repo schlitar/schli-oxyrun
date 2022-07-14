@@ -81,7 +81,7 @@ function CreateOxyVehicle()
 	TriggerEvent("x-hotwire:give-keys", oxyVehicle)
     while true do
 		Citizen.Wait(1)
-		QBCore.Functions.DrawText3D(carspawns[spawnpoint]['coords']["x"], carspawns[spawnpoint]['coords']["y"], carspawns[spawnpoint]['coords']["z"], "Dagıtım Aracı (Çalıntı).")
+		QBCore.Functions.DrawText3D(carspawns[spawnpoint]['coords']["x"], carspawns[spawnpoint]['coords']["y"], carspawns[spawnpoint]['coords']["z"], "Teslimat Aracı (Çalıntı).")
 		if #(GetEntityCoords(PlayerPedId()) - vector3(carspawns[spawnpoint]['coords']["x"], carspawns[spawnpoint]['coords']["y"], carspawns[spawnpoint]['coords']["z"])) < 8.0 then
 			return
 		end
@@ -223,9 +223,9 @@ function DoDropOff()
 			end
 
 			Citizen.Wait(2000)
-			TriggerServerEvent("oxydelivery:finishDealing")
+			QBCore.Functions.Notify('Teslimat başarılı. Bir Sonraki Teslimat Yeri Birazdan Gelecek..', 'success')
 		else
-			QBCore.Functions.Notify('İş İptal Edildi', 'error')
+			QBCore.Functions.Notify('Teslimat Başarısız.', 'error')
 		end
 	
 		DeleteCreatedPed()
@@ -284,7 +284,7 @@ AddEventHandler("oxydelivery:client", function()
 			SetEntityAsNoLongerNeeded(oxyVehicle)
 			tasking = false
 			OxyRun = false
-			QBCore.Functions.Notify('Çok uzun sürdü!', 'error')
+			QBCore.Functions.Notify('Çok uzun süre sattığın için artık satamıyorsun.', 'success')
 		end
 		if dstcheck < 2.0 and pedCreated then
 
@@ -332,7 +332,7 @@ Citizen.CreateThread(function()
 			if not DoesEntityExist(oxyVehicle) or GetVehicleEngineHealth(oxyVehicle) < 200.0 or GetVehicleBodyHealth(oxyVehicle) < 200.0 then
 				OxyRun = false
 				tasking = false
-				QBCore.Functions.Notify("Bayi, arabasının durumu nedeniyle artık size iş vermiyor!", "error")
+				QBCore.Functions.Notify('Arabaya zarar verdiğin için artık konum gelmiyor.', 'error')
 			else
 				if tasking then
 					Citizen.Wait(30000)
@@ -358,6 +358,6 @@ AddEventHandler("oxydelivery:startDealing", function()
 	CreateOxyVehicle()
 	OxyRun = true
 	firstdeal = true
-	QBCore.Functions.Notify('Sizin için bir araba sağlandı. GPSiniz yakında konumlarla güncellenecek. İş bittiğinde geri dönmene gerek yok!', 'success')
+	QBCore.Functions.Notify('Teslimat aracın orada! GPSiniz yakında konumlarla güncellenecek. İş bittiğinde geri dönmene gerek yok!', 'success')
 end)
 
